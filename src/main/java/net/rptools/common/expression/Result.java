@@ -23,12 +23,12 @@ import java.util.function.Supplier;
 
 public class Result {
   private final String expression;
-  private Supplier<String> detailExpression;
+  private Supplier<String> detailExpressionSupplier;
   private Object value;
   private String description;
   private List<Integer> rolled;
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties = new HashMap<>();
 
   public Result(String expression) {
     this.expression = expression;
@@ -39,11 +39,11 @@ public class Result {
   }
 
   public String getDetailExpression() {
-    return detailExpression != null ? detailExpression.get() : "";
+    return detailExpressionSupplier != null ? detailExpressionSupplier.get() : "";
   }
 
-  public void setDetailExpression(Supplier<String> detailExpression) {
-    this.detailExpression = detailExpression;
+  public void setDetailExpression(Supplier<String> supplier) {
+    this.detailExpressionSupplier = supplier;
   }
 
   public String getDescription() {
@@ -78,7 +78,8 @@ public class Result {
     StringBuilder sb = new StringBuilder(64);
     sb.append(expression).append(" = ");
 
-    if (detailExpression != null && !detailExpression.equals(value.toString())) {
+    String detailExpression = getDetailExpression();
+    if (!detailExpression.equals(value.toString())) {
       sb.append("(").append(detailExpression).append(") = ");
     }
 
